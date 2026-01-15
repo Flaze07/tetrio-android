@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "webview-test",
-    "slug": "webview-test",
+    "name": "tetrio-android",
+    "slug": "tetrio-android",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/images/icon.png",
-    "scheme": "webviewtest",
+    "scheme": "tetrioandroid",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -20,7 +20,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.nekodja.webviewtest"
+      "package": "com.flaze07.tetrioandroid"
     },
     "web": {
       "output": "static",
