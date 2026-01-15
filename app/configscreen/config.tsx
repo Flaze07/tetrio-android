@@ -15,6 +15,36 @@ export default function Config() {
 
   const [currentSelectedIdx, setCurrentSelectedIdx] = useState<number>(-1);
 
+  const onAddButton = () => {
+    setButtons([
+      ...buttons,
+      {
+        id: generateId(),
+        position: {
+          x: 0,
+          y: 0,
+        },
+        color: "red",
+        keycode: "",
+        size: {
+          x: 50,
+          y: 50,
+        }
+      },
+    ]);
+  }
+
+  const onDeleteButton = () => {
+    console.log("DELETE IS CALLED");
+    if (currentSelectedIdx === -1) return;
+    setButtons(prev => {
+      const newButtons = [...prev];
+      newButtons.splice(currentSelectedIdx, 1);
+      return newButtons;
+    })
+    setCurrentSelectedIdx(-1);
+  }
+
   return (
     <SafeAreaView
       style={tw`flex-1 w-full bg-slate-900`}
@@ -33,24 +63,8 @@ export default function Config() {
         }}
         currentSelectedIdx={currentSelectedIdx}
         currentButton={currentSelectedIdx === -1 ? null : buttons[currentSelectedIdx]}
-        onAddButton={() => {
-          setButtons([
-            ...buttons,
-            {
-              id: generateId(),
-              position: {
-                x: 0,
-                y: 0,
-              },
-              color: "red",
-              keycode: "",
-              size: {
-                x: 50,
-                y: 50,
-              }
-            },
-          ]);
-        }}
+        onAddButton={() => onAddButton()}
+        onDeleteButton={() => onDeleteButton()}
       />
       {
         buttons.map((button, idx) => (

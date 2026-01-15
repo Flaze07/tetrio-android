@@ -4,9 +4,11 @@ import { ButtonConfig } from "@/types";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
+import { Picker } from "@react-native-picker/picker";
 
 interface ConfigTopBarProps {
   onAddButton: () => void;
+  onDeleteButton: () => void;
   currentSelectedIdx: number;
   currentButton: ButtonConfig | null;
   onSelectColor: (color: string) => void;
@@ -16,6 +18,7 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
 
   const {
     onAddButton,
+    onDeleteButton,
     currentSelectedIdx,
     currentButton,
     onSelectColor
@@ -77,6 +80,7 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
           style={tw`flex-1`}
         />
         <TouchableOpacity
+          onPress={() => onDeleteButton()}
           style={tw`bg-red-500 px-4 py-2 rounded-lg`}
         >
           <Text
