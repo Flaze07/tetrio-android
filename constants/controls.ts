@@ -1,4 +1,5 @@
 export const CONTROLS = {
+  empty: "empty",
   moveLeft: "ARROWLEFT",
   moveRight: "ARROWRIGHT",
   softDrop: "ARROWDOWN",
@@ -27,3 +28,5 @@ export const CONTROLS_LIST = Object.entries(CONTROLS).map(([key, value]) => ({
   key,
   value,
 }));
+
+export type CONTROL_TYPE = keyof typeof CONTROLS;

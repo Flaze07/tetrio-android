@@ -25,7 +25,7 @@ export default function Config() {
           y: 0,
         },
         color: "red",
-        keycode: "",
+        keycode: "empty",
         size: {
           x: 50,
           y: 50,
@@ -35,7 +35,6 @@ export default function Config() {
   }
 
   const onDeleteButton = () => {
-    console.log("DELETE IS CALLED");
     if (currentSelectedIdx === -1) return;
     setButtons(prev => {
       const newButtons = [...prev];
@@ -65,6 +64,28 @@ export default function Config() {
         currentButton={currentSelectedIdx === -1 ? null : buttons[currentSelectedIdx]}
         onAddButton={() => onAddButton()}
         onDeleteButton={() => onDeleteButton()}
+        onKeycodeChange={(newValue) => {
+          if (currentSelectedIdx === -1) return;
+          setButtons((prev) => {
+            const newButtons = [...prev];
+            newButtons[currentSelectedIdx] = {
+              ...newButtons[currentSelectedIdx],
+              keycode: newValue,
+            };
+            return newButtons;
+          })
+        }}
+        onSizeChange={(size) => {
+          if (currentSelectedIdx === -1) return;
+          setButtons((prev) => {
+            const newButtons = [...prev];
+            newButtons[currentSelectedIdx] = {
+              ...newButtons[currentSelectedIdx],
+              size: { x: size, y: size },
+            };
+            return newButtons;
+          });
+        }}
       />
       {
         buttons.map((button, idx) => (

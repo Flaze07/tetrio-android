@@ -4,7 +4,9 @@ import { ButtonConfig } from "@/types";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
+import Slider from "@react-native-community/slider";
 import { Picker } from "@react-native-picker/picker";
+import { CONTROL_TYPE, CONTROLS_LIST } from "@/constants/controls";
 
 interface ConfigTopBarProps {
   onAddButton: () => void;
@@ -12,6 +14,8 @@ interface ConfigTopBarProps {
   currentSelectedIdx: number;
   currentButton: ButtonConfig | null;
   onSelectColor: (color: string) => void;
+  onSizeChange: (size: number) => void;
+  onKeycodeChange: (keycode: CONTROL_TYPE) => void;
 }
 
 export function ConfigTopBar(props: ConfigTopBarProps) {
@@ -21,10 +25,13 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
     onDeleteButton,
     currentSelectedIdx,
     currentButton,
-    onSelectColor
+    onSelectColor,
+    onSizeChange,
+    onKeycodeChange,
   } = props;
 
   const [showColorDropdown, setShowColorDropdown] = useState<boolean>(false);
+  const [showKeycodeDropdown, setShowKeycodeDropdown] = useState<boolean>(false);
 
   return (
     <View
@@ -41,16 +48,11 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
         </Text>
       </TouchableOpacity>
       <View
-        style={tw`${currentSelectedIdx === -1 ? 'hidden' : 'flex-row w-full pr-40 items-center ml-2'}`}
+        style={tw`${currentSelectedIdx === -1 ? 'hidden' : 'flex-row w-full pr-20 items-center ml-2'}`}
       >
-        <Text
-          style={tw`text-white`}
-        >
-          Select Color
-        </Text>
         <TouchableOpacity
           onPress={() => setShowColorDropdown(true)}
-          style={tw`border border-slate-600 px-4 py-2 rounded-lg ml-3`}
+          style={tw`border border-slate-600 px-4 py-2 rounded-lg ml-2 mr-4`}
         >
           <View style={tw`flex-row items-center`}>
             {currentButton?.color && (
@@ -61,6 +63,7 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
             </Text>
           </View>
         </TouchableOpacity>
+
         <Dropdown
           options={COLOR_OPTIONS}
           showDropdown={showColorDropdown}
@@ -76,6 +79,43 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
             </View>
           )}
         />
+
+        <TouchableOpacity
+          onPress={() => setShowKeycodeDropdown(true)}
+          style={tw`border border-slate-600 px-4 py-2 rounded-lg ml-2 mr-4`}
+        >
+          <Text style={tw`text-white capitalize`}>
+            {CONTROLS_LIST.find((control) => control.value === currentButton?.keycode)?.key}
+          </Text>
+        </TouchableOpacity>
+
+        <Dropdown
+          options={CONTROLS_LIST}
+          showDropdown={showKeycodeDropdown}
+          onSelectOption={(option) => {
+            onKeycodeChange(option.value);
+            setShowKeycodeDropdown(false);
+          }}
+          onClose={() => setShowKeycodeDropdown(false)}
+          optionComponent={(option) => (
+            <View style={tw`flex-row items-center p-4 border-b border-slate-800`}>
+              <Text style={tw`text-white capitalize`}>{option.key}</Text>
+            </View>
+          )}
+        />
+
+        <Text style={tw`text-white mr-2`}>Size: {Math.round(currentButton?.size?.x || 0)}</Text>
+        <Slider
+          style={{ width: 200, height: 40 }}
+          minimumValue={20}
+          maximumValue={200}
+          step={5}
+          minimumTrackTintColor="#FFFFFF"
+          maximumTrackTintColor="#000000"
+          value={currentButton?.size?.x || 50}
+          onValueChange={onSizeChange}
+        />
+
         <View
           style={tw`flex-1`}
         />
