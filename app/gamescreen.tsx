@@ -1,9 +1,14 @@
+import { GameButton } from "@/components/game-button"
+import { CONTROL_VALUE } from "@/constants/controls"
+import { useButtonSave } from "@/hooks/use-button-save"
 import { useEffect, useRef } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { WebView } from "react-native-webview"
 import tw from "twrnc"
 
 export default function gameScreen() {
+
+  const { buttons } = useButtonSave();
 
   const injectedJS = `
     function A() {
@@ -20,13 +25,13 @@ export default function gameScreen() {
     webviewRef?.current?.injectJavaScript(injectedJS)
   }
 
-  const arrowKeyDown = () => {
+  const onPressIn = (code: CONTROL_VALUE) => {
     webviewRef.current?.injectJavaScript(`
     (function() {
       document.body.dispatchEvent(
         new KeyboardEvent('keydown', {
           bubbles: true,
-          code: 'ARROWLEFT',
+          code: '${code}',
         })
       );
     })();
@@ -34,13 +39,13 @@ export default function gameScreen() {
   `);
   }
 
-  const arrowKeyUp = () => {
+  const onPressOut = (code: CONTROL_VALUE) => {
     webviewRef.current?.injectJavaScript(`
     (function() {
       document.body.dispatchEvent(
         new KeyboardEvent('keyup', {
           bubbles: true,
-          code: 'ARROWLEFT',
+          code: '${code}',
         })
       );
     })();
@@ -67,13 +72,16 @@ export default function gameScreen() {
         ]}
         style={tw`flex-1 w-full`}
       />
-      <TouchableOpacity
-        onPressIn={arrowKeyDown}
-        onPressOut={arrowKeyUp}
-        style={tw`w-10 h-10 bg-orange-500 absolute`}
-      >
-
-      </TouchableOpacity>
+      {
+        buttons?.map(button => (
+          <GameButton
+            key={button.id}
+            button={button}
+            onPressIn={() => onPressIn(button.keycode)}
+            onPressOut={() => onPressOut(button.keycode)}
+          />
+        ))
+      }
     </View>
   )
 }

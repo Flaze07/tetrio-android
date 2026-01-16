@@ -1,5 +1,5 @@
 import { TailwindColorName } from "@/constants/colors";
-import { CONTROL_TYPE } from "@/constants/controls";
+import { CONTROL_TYPE, CONTROL_VALUE } from "@/constants/controls";
 
 export interface ButtonConfig {
   id: string;
@@ -8,7 +8,7 @@ export interface ButtonConfig {
     y: number;
   };
   color: TailwindColorName;
-  keycode: CONTROL_TYPE;
+  keycode: CONTROL_VALUE;
   size: {
     x: number;
     y: number;

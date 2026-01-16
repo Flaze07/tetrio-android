@@ -16,6 +16,7 @@ interface ConfigTopBarProps {
   onSelectColor: (color: string) => void;
   onSizeChange: (size: number) => void;
   onKeycodeChange: (keycode: CONTROL_TYPE) => void;
+  onSave: () => void;
 }
 
 export function ConfigTopBar(props: ConfigTopBarProps) {
@@ -28,6 +29,7 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
     onSelectColor,
     onSizeChange,
     onKeycodeChange,
+    onSave,
   } = props;
 
   const [showColorDropdown, setShowColorDropdown] = useState<boolean>(false);
@@ -47,8 +49,18 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
           Add
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={onSave}
+        style={tw`border border-slate-600 px-4 py-2 rounded-lg ml-2`}
+      >
+        <Text
+          style={tw`text-white`}
+        >
+          Save
+        </Text>
+      </TouchableOpacity>
       <View
-        style={tw`${currentSelectedIdx === -1 ? 'hidden' : 'flex-row w-full pr-20 items-center ml-2'}`}
+        style={tw`${currentSelectedIdx === -1 ? 'hidden' : 'flex-row w-full pr-40 items-center ml-2'}`}
       >
         <TouchableOpacity
           onPress={() => setShowColorDropdown(true)}

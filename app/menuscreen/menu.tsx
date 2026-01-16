@@ -16,7 +16,7 @@ export default function Menu() {
   return (
     <View style={tw`flex-1 w-full bg-slate-900 items-center justify-center`}>
       <Text style={tw`text-4xl font-bold text-white mb-16`}>
-        Main Menu
+        Tetr.io Android
       </Text>
 
       <View style={tw`gap-6`}>
