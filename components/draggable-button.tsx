@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Animated, PanResponder, StyleProp, ViewStyle } from "react-native";
+import { CONTROL_TYPE, CONTROLS_ELEMENT } from "@/constants/controls";
 import tw from "twrnc";
 
 interface DraggableButtonProps {
@@ -13,6 +14,8 @@ interface DraggableButtonProps {
   colorClass?: string;
   /** Opacity (0-1) */
   opacity?: number;
+  /** Keycode of the button */
+  keycode: CONTROL_TYPE;
   /** Callback when position changes */
   onPositionChange?: (position: { x: number; y: number }) => void;
   /** Callback when button is pressed/selected */
@@ -27,10 +30,12 @@ export function DraggableButton({
   initialY = 0,
   colorClass = "bg-red-500",
   opacity = 0.5,
+  keycode,
   onPositionChange,
   onPress,
   style,
 }: DraggableButtonProps) {
+
   // Use a ref to store the current position for the pan responder
   const positionRef = useRef({ x: initialX, y: initialY });
 
@@ -67,7 +72,7 @@ export function DraggableButton({
     <Animated.View
       {...panResponder.panHandlers}
       style={[
-        tw`absolute ${colorClass}`,
+        tw`absolute ${colorClass} items-center justify-center`,
         {
           width: size,
           height: size,
@@ -79,6 +84,8 @@ export function DraggableButton({
         },
         style,
       ]}
-    />
+    >
+      {CONTROLS_ELEMENT[keycode]}
+    </Animated.View>
   );
 }

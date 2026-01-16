@@ -91,6 +91,7 @@ export default function Config() {
         buttons.map((button, idx) => (
           <DraggableButton
             key={button.id}
+            keycode={button.keycode}
             size={button.size.x}
             initialX={button.position.x}
             initialY={button.position.y}
