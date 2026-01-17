@@ -6,7 +6,7 @@ import { TouchableOpacity, View } from "react-native"
 import { WebView } from "react-native-webview"
 import tw from "twrnc"
 
-export default function GameScreen() {
+export function GameScreen() {
 
   const { buttons } = useButtonSave();
 

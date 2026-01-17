@@ -1,16 +1,22 @@
 import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import tw from "twrnc";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/App";
 
-export default function Menu() {
-  const router = useRouter();
+type NavProps = NativeStackNavigationProp<RootStackParamList, "menu">;
+
+export function MenuScreen() {
+
+  const navigation = useNavigation<NavProps>();
 
   const handlePlay = () => {
-    router.push("/gamescreen");
+    navigation.push("game");
   };
 
   const handleConfigure = () => {
-    router.push("/configscreen/config");
+    navigation.push("config");
   };
 
   return (

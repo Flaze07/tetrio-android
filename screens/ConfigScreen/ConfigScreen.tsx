@@ -12,7 +12,7 @@ import { TouchableOpacity, View, Text } from "react-native";
 // Generate a random string ID
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
-export default function Config() {
+export function ConfigScreen() {
 
   const {
     buttons: loadedButtons,
