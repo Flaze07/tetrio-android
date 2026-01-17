@@ -8,4 +8,4 @@ This application contains the following features
 
 Additional features will be added in the future
 
-The application is available for download at the following [link](https://github.com/Flaze07/tetrio-android/releases/download/1.0/tetrio-android-1-0-0.apk)
+The application is available for download at the following [link](https://github.com/Flaze07/tetrio-android/releases/latest)
