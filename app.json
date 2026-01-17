@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
-    "scheme": "tetrioandroid",
+    "scheme": "com.flaze07.tetrioandroid",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
