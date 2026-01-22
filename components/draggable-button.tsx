@@ -90,16 +90,10 @@ export function DraggableButton({
           }
         })();
 
-        // positionRef.current = { x: newX, y: newY };
-
         pan.setValue({
           x: newX / 10,
           y: newY / 10,
         })
-        // Animated.event(
-        //   [null, { dx: pan.x, dy: pan.y }],
-        //   { useNativeDriver: false }
-        // )
       },
       onPanResponderRelease: () => {
         pan.flattenOffset();

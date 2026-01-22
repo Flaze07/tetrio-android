@@ -13,7 +13,10 @@ export function GameScreen() {
   const injectedJS = `
     function A() {
       const div = document.querySelector(".fs-sticky-footer");
-      div?.remove()
+      div?.remove();
+
+      const div2 = document.querySelector("#fs-sticky-footer");
+      div2?.remove();
       setTimeout(A, 100);
     };
     A();
