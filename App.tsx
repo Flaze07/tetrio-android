@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 export type RootStackParamList = {
   menu: undefined;
@@ -56,6 +57,7 @@ export default function App() {
           <Stack.Screen name="game" options={{ headerShown: false }} component={GameScreen} />
           <Stack.Screen name="config" options={{ headerShown: false }} component={ConfigScreen} />
         </Stack.Navigator>
+        <StatusBar hidden />
       </SafeAreaProvider>
     </NavigationContainer>
   )

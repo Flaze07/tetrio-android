@@ -8,6 +8,9 @@ import { ConfigTopBar } from "./config-top-bar";
 import { CONTROL_VALUE, DEFAULT_CONTROLS } from "@/constants/controls";
 import { useButtonSave } from "@/hooks/use-button-save";
 import { TouchableOpacity, View, Text } from "react-native";
+import MaterialIcon from "@expo/vector-icons/MaterialIcons";
+import { MoreConfigModal } from "./MoreConfigModal";
+import { useConfig } from "@/hooks/use-config";
 
 // Generate a random string ID
 const generateId = () => Math.random().toString(36).substring(2, 9);
@@ -18,6 +21,10 @@ export function ConfigScreen() {
     buttons: loadedButtons,
     saveButton,
   } = useButtonSave();
+
+  const { gridSize } = useConfig();
+
+  const [showMoreConfig, setShowMoreConfig] = useState<boolean>(false);
 
   const [buttons, setButtons] = useState<ButtonConfig[]>([]);
 
@@ -118,9 +125,28 @@ export function ConfigScreen() {
         onKeycodeChange={(newValue) => onKeycodeChange(newValue)}
         onSizeChange={(size) => onSizeChange(size)}
       />
+      <View
+        style={tw`flex-shrink flex-row mt-2`}
+      >
+        <TouchableOpacity
+          onPress={() => setShowMoreConfig(true)}
+          style={tw`border border-slate-600 px-4 py-2 rounded-lg`}
+        >
+          <MaterialIcon
+            name="menu"
+            color={"white"}
+            size={22}
+          />
+        </TouchableOpacity>
+      </View>
+      <MoreConfigModal
+        visible={showMoreConfig}
+        onClose={() => setShowMoreConfig(false)}
+      />
       {
         buttons.map((button, idx) => (
           <DraggableButton
+            gridDivision={gridSize}
             key={button.id}
             keycode={button.keycode}
             size={button.size.x}
