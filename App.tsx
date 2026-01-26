@@ -13,7 +13,7 @@ import { StatusBar } from "expo-status-bar";
 
 export type RootStackParamList = {
   menu: undefined;
-  game: undefined;
+  game: { roomCode: string } | undefined;
   config: undefined;
 };
 
