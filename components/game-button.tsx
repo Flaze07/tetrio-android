@@ -1,7 +1,7 @@
 import { COLOR_NAME_TO_CLASS } from "@/constants/colors";
 import { CONTROLS_ELEMENT } from "@/constants/controls";
 import { ButtonConfig } from "@/types";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
 interface Props {
