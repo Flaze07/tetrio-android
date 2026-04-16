@@ -70,6 +70,7 @@ export function GameScreen() {
   if (params?.viewReplay) {
     webviewRef.current?.injectJavaScript(`
       function simulateDrop(base64, fileName, mimeType) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'drop', base64.length, fileName, mimeType }));
         const byteCharacters = atob(base64);
         const byteNumbers = new Array(byteCharacters.length)
           .fill()
@@ -125,6 +126,50 @@ export function GameScreen() {
     `);
   }
 
+  const injectReplay = () => {
+    console.log("INJECTING REPLAY");
+    webviewRef.current?.injectJavaScript(`
+      (function() {
+        const byteCharacters = atob('${replayData}');
+        const byteNumbers = new Array(byteCharacters.length)
+          .fill()
+          .map((_, i) => byteCharacters.charCodeAt(i));
+        const byteArray = new Uint8Array(byteNumbers);
+        const file = new File([byteArray], "whatever.ttrm", { type: "*/*"});
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        const dropEvent = new DragEvent('drop', {
+          dataTransfer,
+          bubbles: true
+        });
+        const dropZone = document.querySelector('#menus');
+        dropZone.dispatchEvent(dropEvent);
+      })();
+      true;
+    `);
+    // webviewRef.current?.injectJavaScript(`
+    //   window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'drop external' }));
+    //   (() => {
+    //     window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'drop' }));
+    //     const byteCharacters = atob(${replayData});
+    //     const byteNumbers = new Array(byteCharacters.length)
+    //       .fill()
+    //       .map((_, i) => byteCharacters.charCodeAt(i));
+    //     const byteArray = new Uint8Array(byteNumbers);
+    //     const file = new File([byteArray], "whatever", { type: "*/*"});
+    //     const dataTransfer = new DataTransfer();
+    //     dataTransfer.items.add(file);
+    //     const dropEvent = new DragEvent('drop', {
+    //       dataTransfer,
+    //       bubbles: true
+    //     });
+    //     const dropZone = document.querySelector('#menus');
+    //     dropZone.dispatchEvent(dropEvent);
+    //   })();
+    //   true;
+    // `);
+  }
+
   const handleWebViewMessage = (e: WebViewMessageEvent) => {
     const data = e.nativeEvent.data;
     const jsonData = JSON.parse(data);
@@ -134,6 +179,8 @@ export function GameScreen() {
         console.log("CALLED");
         checkMenuVisible();
       }, 500);
+    } else if (jsonData.event === "menuVisible") {
+      injectReplay();
     }
   }
 
@@ -178,16 +225,18 @@ export function GameScreen() {
           "https://ch.tetr.io",
         ]}
         onMessage={(e) => handleWebViewMessage(e)}
-        injectedJavaScript={`
-          console = new Object();
-          console.log = function(log) {
-            window.ReactNativeWebView.postMessage(JSON.stringify({
-              event: 'console',
-              level: 'log',
-              args: [log]
-            }));
-          }
-        `}
+        // injectedJavaScript={`
+        //   oldConsole = console.log;
+        //   console = new Object();
+        //   console.log = function(log) {
+        //     oldConsole(log);
+        //     window.ReactNativeWebView.postMessage(JSON.stringify({
+        //       event: 'console',
+        //       level: 'log',
+        //       args: [log]
+        //     }));
+        //   }
+        // `}
         style={tw`flex-1 w-full`}
       />
       {
