@@ -10,6 +10,7 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export type RootStackParamList = {
   menu: undefined;
@@ -52,12 +53,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <SafeAreaProvider>
-        <Stack.Navigator>
-          <Stack.Screen name="menu" options={{ headerShown: false }} component={MenuScreen} />
-          <Stack.Screen name="game" options={{ headerShown: false }} component={GameScreen} />
-          <Stack.Screen name="config" options={{ headerShown: false }} component={ConfigScreen} />
-        </Stack.Navigator>
-        <StatusBar hidden />
+        <GestureHandlerRootView>
+          <Stack.Navigator>
+            <Stack.Screen name="menu" options={{ headerShown: false }} component={MenuScreen} />
+            <Stack.Screen name="game" options={{ headerShown: false }} component={GameScreen} />
+            <Stack.Screen name="config" options={{ headerShown: false }} component={ConfigScreen} />
+          </Stack.Navigator>
+          <StatusBar hidden />
+        </GestureHandlerRootView>
       </SafeAreaProvider>
     </NavigationContainer>
   )

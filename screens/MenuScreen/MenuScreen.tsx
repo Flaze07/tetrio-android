@@ -14,7 +14,7 @@ export function MenuScreen() {
 
   const navigation = useNavigation<NavProps>();
   const [modalVisible, setModalVisible] = useState(false);
-  const [replayModalVisible, setReplayModalVisible] = useState(true);
+  const [replayModalVisible, setReplayModalVisible] = useState(false);
 
   const handlePlay = () => {
     navigation.push("game");

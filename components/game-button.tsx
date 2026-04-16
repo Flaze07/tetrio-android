@@ -1,7 +1,10 @@
 import { COLOR_NAME_TO_CLASS } from "@/constants/colors";
 import { CONTROLS_ELEMENT } from "@/constants/controls";
 import { ButtonConfig } from "@/types";
-import { TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { TouchableOpacity, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { runOnJS } from "react-native-reanimated";
 import tw from "twrnc";
 
 interface Props {
@@ -18,26 +21,51 @@ export function GameButton(props: Props) {
     onPressOut,
   } = props;
 
+  const [isPressed, setIsPressed] = useState<boolean>(false);
+
   const color = COLOR_NAME_TO_CLASS[button.color];
 
-  return (
-    <TouchableOpacity
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
-      style={[
-        tw`absolute ${color} opacity-70 items-center justify-center`,
-        {
-          width: button.size.x,
-          height: button.size.y,
+  const handlePressIn = () => {
+    setIsPressed(true);
+    onPressIn?.();
+  };
 
-          transform: [
-            { translateX: button.position.x },
-            { translateY: button.position.y },
-          ]
-        }
-      ]}
+  const handlePressOut = () => {
+    setIsPressed(false);
+    onPressOut?.();
+  };
+
+  const tap = Gesture.LongPress()
+    .minDuration(0)
+    .runOnJS(true)
+    .onBegin(() => handlePressIn())
+    .onFinalize(() => handlePressOut());
+
+
+  return (
+    <GestureDetector
+      gesture={tap}
+      // onPressIn={onPressIn}
+      // onPressOut={onPressOut}
     >
-      {CONTROLS_ELEMENT[button.keycode]}
-    </TouchableOpacity>
+      <View
+        style={[
+          tw`absolute ${color} items-center justify-center`,
+          isPressed && tw`opacity-30`,
+          !isPressed && tw`opacity-70`,
+          {
+            width: button.size.x,
+            height: button.size.y,
+
+            transform: [
+              { translateX: button.position.x },
+              { translateY: button.position.y },
+            ]
+          }
+        ]}
+      >
+        {CONTROLS_ELEMENT[button.keycode]}
+      </View>
+    </GestureDetector>
   )
 }

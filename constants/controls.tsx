@@ -1,5 +1,6 @@
 import { ButtonConfig } from "@/types";
 import MaterialIcon from "@expo/vector-icons/MaterialIcons";
+import MaterialCommunityIcon from "@expo/vector-icons/MaterialCommunityIcons";
 import tw from "twrnc";
 
 export const CONTROLS = {
@@ -15,6 +16,8 @@ export const CONTROLS = {
   exit: "ESCAPE",
   retry: "R",
   chat: "T",
+  hide: "HIDE",
+  sendchat: "SENDCHAT",
   // target1: "1",
   // target2: "2",
   // target3: "3",
@@ -41,6 +44,8 @@ export const CONTROLS_ELEMENT: any = {
   ESCAPE: <MaterialIcon name="transit-enterexit" size={30} color="black" />,
   R: <MaterialIcon name="refresh" size={30} color="black" />,
   T: <MaterialIcon name="chat" size={30} color="black" />,
+  HIDE: <MaterialCommunityIcon name="crosshairs" size={30} color="black" />,
+  SENDCHAT: <MaterialIcon name="chat" size={30} color="black" />,
   // menuUp: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
   // menuDown: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
   // menuLeft: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
@@ -50,10 +55,12 @@ export const CONTROLS_ELEMENT: any = {
   // openSocial: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
 }
 
-export const CONTROLS_LIST = Object.entries(CONTROLS).map(([key, value]) => ({
-  key,
-  value,
-}));
+export const CONTROLS_LIST = Object.entries(CONTROLS)
+  .filter(([key]) => key !== "hide" && key !== "sendchat")
+  .map(([key, value]) => ({
+    key,
+    value,
+  }));
 
 export type CONTROL_TYPE = keyof typeof CONTROLS;
 export type CONTROL_VALUE = typeof CONTROLS[CONTROL_TYPE];

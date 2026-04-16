@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react"
 import { View } from "react-native"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
 import tw from "twrnc"
+import { Dimensions } from "react-native"
 
 type GameRouteProp = RouteProp<RootStackParamList, "game">
 
@@ -18,9 +19,11 @@ export function GameScreen() {
 
   const { buttons } = useButtonSave();
 
+  const screenWidth = Dimensions.get("window").width;
+
   const [replayData] = useAtom(replayDataAtom);
 
-  const [viewedReplay] = useState<boolean>(false);
+  const [hideButtons, setHideButtons] = useState<boolean>(false);
 
   const removeAdJS = `
     function A() {
@@ -66,6 +69,25 @@ export function GameScreen() {
     true;
   `);
   }
+
+  const onHide = () => {
+    setHideButtons(prev => !prev);
+  }
+
+  const onSendChat = () => {
+    webviewRef.current?.injectJavaScript(`
+      (function() {
+        ["league_chat_input", "ingame_chat_input", "chat_input", "social_dm_input"].forEach(function(id) {
+          const input = document.getElementById(id);
+          input.dispatchEvent(new KeyboardEvent('keydown', {
+            'code': 'Enter'
+          }))
+        });
+      })();
+      true;
+    `);
+  }
+
 
   if (params?.viewReplay) {
     webviewRef.current?.injectJavaScript(`
@@ -147,27 +169,6 @@ export function GameScreen() {
       })();
       true;
     `);
-    // webviewRef.current?.injectJavaScript(`
-    //   window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'drop external' }));
-    //   (() => {
-    //     window.ReactNativeWebView.postMessage(JSON.stringify({ event: 'drop' }));
-    //     const byteCharacters = atob(${replayData});
-    //     const byteNumbers = new Array(byteCharacters.length)
-    //       .fill()
-    //       .map((_, i) => byteCharacters.charCodeAt(i));
-    //     const byteArray = new Uint8Array(byteNumbers);
-    //     const file = new File([byteArray], "whatever", { type: "*/*"});
-    //     const dataTransfer = new DataTransfer();
-    //     dataTransfer.items.add(file);
-    //     const dropEvent = new DragEvent('drop', {
-    //       dataTransfer,
-    //       bubbles: true
-    //     });
-    //     const dropZone = document.querySelector('#menus');
-    //     dropZone.dispatchEvent(dropEvent);
-    //   })();
-    //   true;
-    // `);
   }
 
   const handleWebViewMessage = (e: WebViewMessageEvent) => {
@@ -239,8 +240,42 @@ export function GameScreen() {
         // `}
         style={tw`flex-1 w-full`}
       />
+      <GameButton
+        button={{
+          id: "hide",
+          keycode: "HIDE",
+          size: {
+            x: 50,
+            y: 50,
+          },
+          position: {
+            x: 10,
+            y: 10,
+          },
+          color: "stone"
+        }}
+        onPressIn={() => onHide()}
+      />
+
+      <GameButton
+        button={{
+          id: "hide",
+          keycode: "SENDCHAT",
+          size: {
+            x: 50,
+            y: 50,
+          },
+          position: {
+            x: screenWidth - 10,
+            y: 10,
+          },
+          color: "stone"
+        }}
+        onPressIn={() => onSendChat()}
+      />
+
       {
-        buttons?.map(button => (
+        !hideButtons && buttons?.map(button => (
           <GameButton
             key={button.id}
             button={button}
