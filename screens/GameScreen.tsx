@@ -77,7 +77,7 @@ export function GameScreen() {
   const onSendChat = () => {
     webviewRef.current?.injectJavaScript(`
       (function() {
-        ["league_chat_input", "ingame_chat_input", "chat_input", "social_dm_input"].forEach(function(id) {
+        [ "chat_input", "league_chat_input", "ingame_chat_input", "social_dm_input"].forEach(function(id) {
           const input = document.getElementById(id);
           input.dispatchEvent(new KeyboardEvent('keydown', {
             'code': 'Enter'
