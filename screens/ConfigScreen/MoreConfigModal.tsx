@@ -1,13 +1,16 @@
 import { useConfig } from "@/hooks/use-config";
+import { ButtonConfig } from "@/types";
 import Slider from "@react-native-community/slider";
 import { useEffect, useState } from "react";
-import { Modal, View, ScrollView, Text } from "react-native";
+import { Modal, View, ScrollView, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 
 interface MoreConfigModalProps {
   visible?: boolean;
   onClose?: () => void;
+  buttonConfig?: ButtonConfig;
+  modifyConfig?: (config: ButtonConfig) => void 
 }
 
 export function MoreConfigModal(props: MoreConfigModalProps) {
@@ -15,6 +18,8 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
   const {
     visible = false,
     onClose,
+    buttonConfig,
+    modifyConfig,
   } = props;
 
   const [displayGridSize, setDisplayGridSize] = useState<number>(10);
@@ -44,7 +49,7 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
     >
       <SafeAreaView
         onTouchStart={() => onClose?.()}
-        style={tw`flex-1 w-full bg-black/50 items-center`}
+        style={tw`flex-1 w-full bg-black/50 items-center py-5`}
       >
         <ScrollView
           onTouchStart={e => e.stopPropagation()}
@@ -67,6 +72,30 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
               debouncedSaveGridSize(newValue);
             }}
           />
+          {
+            buttonConfig !== undefined && (
+              <View
+              >
+                <View
+                  style={tw`flex-row items-center mt-5 gap-4`}
+                >
+                  <Text
+                    style={tw`text-white text-2xl`}
+                  >
+                    Diamond Button Shape
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                        tw`w-10 h-10 border-stone-400 border-4`,
+                        buttonConfig.shape === "SQUARE" && tw`bg-transparent`,
+                        buttonConfig.shape === "DIAMOND" && tw`bg-yellow-300`, 
+                    ]}
+                  >
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )
+          }
         </ScrollView>
       </SafeAreaView>
     </Modal>

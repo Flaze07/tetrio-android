@@ -51,8 +51,12 @@ export function GameButton(props: Props) {
       <View
         style={[
           tw`absolute ${color} items-center justify-center`,
-          isPressed && tw`opacity-30`,
-          !isPressed && tw`opacity-70`,
+          isPressed && {
+            opacity: button.opacity - 0.4,
+          },
+          !isPressed && {
+            opacity: button.opacity,
+          },
           {
             width: button.size.x,
             height: button.size.y,
@@ -60,6 +64,9 @@ export function GameButton(props: Props) {
             transform: [
               { translateX: button.position.x },
               { translateY: button.position.y },
+              {
+                rotate: button.shape === "SQUARE" ? 0 : 45,
+              }
             ]
           }
         ]}

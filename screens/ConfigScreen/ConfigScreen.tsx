@@ -56,7 +56,9 @@ export function ConfigScreen() {
         size: {
           x: 80,
           y: 80,
-        }
+        },
+        shape: "SQUARE",
+        opacity: 1,
       },
     ]);
   }
@@ -142,6 +144,7 @@ export function ConfigScreen() {
       <MoreConfigModal
         visible={showMoreConfig}
         onClose={() => setShowMoreConfig(false)}
+        buttonConfig={currentSelectedIdx=== -1 ? undefined : {...buttons[currentSelectedIdx]}}
       />
       {
         buttons.map((button, idx) => (

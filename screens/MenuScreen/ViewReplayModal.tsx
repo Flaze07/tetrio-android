@@ -48,7 +48,8 @@ export const ViewReplayModal = (props: Props) => {
 
     const validExtension = [
       ".ttrm",
-      ".json"
+      ".json",
+      ".ttr",
     ]
 
     if (!validExtension.includes(asset.name.slice(-5))) {

@@ -252,7 +252,9 @@ export function GameScreen() {
             x: 10,
             y: 10,
           },
-          color: "stone"
+          color: "stone",
+          shape: "SQUARE",
+          opacity: 0.7,
         }}
         onPressIn={() => onHide()}
       />
@@ -269,7 +271,9 @@ export function GameScreen() {
             x: screenWidth - 10,
             y: 10,
           },
-          color: "stone"
+          color: "stone",
+          shape: "SQUARE",
+          opacity: 0.7,
         }}
         onPressIn={() => onSendChat()}
       />
