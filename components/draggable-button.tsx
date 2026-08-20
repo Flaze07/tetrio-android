@@ -16,6 +16,8 @@ interface DraggableButtonProps {
   colorClass?: string;
   /** Opacity (0-1) */
   opacity?: number;
+  /** Shape of the button */
+  shape?: "SQUARE" | "DIAMOND";
   /** Keycode of the button */
   keycode: CONTROL_VALUE;
   /** Callback when position changes */
@@ -33,6 +35,7 @@ export function DraggableButton({
   initialY = 0,
   colorClass = "bg-red-500",
   opacity = 0.5,
+  shape = "SQUARE",
   keycode,
   onPositionChange,
   onPress,
@@ -127,6 +130,7 @@ export function DraggableButton({
           transform: [
             { translateX: pan.x },
             { translateY: pan.y },
+            { rotate: shape === "DIAMOND" ? "45deg" : "0deg" }
           ],
         },
         style,

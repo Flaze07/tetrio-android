@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAtom } from "jotai";
-import { gridSizeAtom } from "@/atoms/config.atoms";
+import { buttonOpacityAtom, buttonShapeAtom, gridSizeAtom } from "@/atoms/config.atoms";
 
 interface UseReturn {
   gridSize: number;
+  buttonOpacity: number;
+  setButtonOpacity: (newValue: number) => void;
+  buttonShape: "SQUARE" | "DIAMOND";
+  setButtonShape: (newValue: "SQUARE" | "DIAMOND") => void;
   saveGridSize: (newValue: number) => void;
 }
 
 export function useConfig(): UseReturn {
 
   const [gridSize, setGridSize] = useAtom(gridSizeAtom);
+  const [buttonOpacity, setButtonOpacity] = useAtom(buttonOpacityAtom);
+  const [buttonShape, setButtonShape] = useAtom(buttonShapeAtom);
 
   const loadGridSize = async () => {
     try {
@@ -31,13 +37,16 @@ export function useConfig(): UseReturn {
     }
   }
 
-
   useEffect(() => {
     loadGridSize();
   }, []);
 
   return {
     gridSize: gridSize,
+    buttonOpacity: buttonOpacity,
+    setButtonOpacity: setButtonOpacity,
+    buttonShape: buttonShape,
+    setButtonShape: setButtonShape,
     saveGridSize: saveGridSize,
   }
 }

@@ -65,7 +65,7 @@ export function GameButton(props: Props) {
               { translateX: button.position.x },
               { translateY: button.position.y },
               {
-                rotate: button.shape === "SQUARE" ? 0 : 45,
+                rotate: button.shape === "SQUARE" ? "0deg" : "45deg",
               }
             ]
           }

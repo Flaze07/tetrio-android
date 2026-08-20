@@ -24,7 +24,14 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
 
   const [displayGridSize, setDisplayGridSize] = useState<number>(10);
 
-  const { gridSize, saveGridSize } = useConfig();
+  const { 
+    gridSize, 
+    buttonOpacity,
+    setButtonOpacity,
+    buttonShape,
+    setButtonShape,
+    saveGridSize
+  } = useConfig();
 
   const makeDebounce = (f: (newValue: number) => any) => {
     let timeout: number;
@@ -72,30 +79,40 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
               debouncedSaveGridSize(newValue);
             }}
           />
-          {
-            buttonConfig !== undefined && (
-              <View
-              >
-                <View
-                  style={tw`flex-row items-center mt-5 gap-4`}
-                >
-                  <Text
-                    style={tw`text-white text-2xl`}
-                  >
-                    Diamond Button Shape
-                  </Text>
-                  <TouchableOpacity
-                    style={[
-                        tw`w-10 h-10 border-stone-400 border-4`,
-                        buttonConfig.shape === "SQUARE" && tw`bg-transparent`,
-                        buttonConfig.shape === "DIAMOND" && tw`bg-yellow-300`, 
-                    ]}
-                  >
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )
-          }
+          <Text
+            style={tw`text-white text-2xl mt-5`}
+          >
+            Button Opacity { buttonOpacity.toFixed(2) }
+          </Text>
+          <Slider 
+            minimumValue={0.1}
+            maximumValue={1}
+            step={0.05}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+            value={buttonOpacity}
+            onValueChange={(newValue) => {
+              setButtonOpacity(newValue);
+            }}
+          />
+          <View
+            style={tw`flex-row items-center mt-5 gap-4`}
+          >
+            <Text
+              style={tw`text-white text-2xl`}
+            >
+              Diamond Button Shape
+            </Text>
+            <TouchableOpacity
+              style={[
+                tw`w-10 h-10 border-stone-400 border-4`,
+                buttonShape === "SQUARE" && tw`bg-transparent`,
+                buttonShape === "DIAMOND" && tw`bg-stone-300`,
+              ]}
+              onPress={() => setButtonShape(buttonShape === "SQUARE" ? "DIAMOND" : "SQUARE")}
+            >
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </Modal>

@@ -22,7 +22,7 @@ export function ConfigScreen() {
     saveButton,
   } = useButtonSave();
 
-  const { gridSize } = useConfig();
+  const { gridSize, buttonOpacity, buttonShape } = useConfig();
 
   const [showMoreConfig, setShowMoreConfig] = useState<boolean>(false);
 
@@ -157,6 +157,8 @@ export function ConfigScreen() {
             initialY={button.position.y}
             colorClass={COLOR_NAME_TO_CLASS[button.color]}
             onPress={() => setCurrentSelectedIdx(idx)}
+            opacity={buttonOpacity}
+            shape={buttonShape}
             onPositionChange={(position: { x: number; y: number }) => {
               setButtons(prev => {
                 const newButtons = [...prev];

@@ -10,6 +10,7 @@ import { View } from "react-native"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
 import tw from "twrnc"
 import { Dimensions } from "react-native"
+import { useConfig } from "@/hooks/use-config"
 
 type GameRouteProp = RouteProp<RootStackParamList, "game">
 
@@ -18,6 +19,7 @@ export function GameScreen() {
   const { params } = useRoute<GameRouteProp>();
 
   const { buttons } = useButtonSave();
+  const { buttonOpacity, buttonShape } = useConfig();
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -282,7 +284,13 @@ export function GameScreen() {
         !hideButtons && buttons?.map(button => (
           <GameButton
             key={button.id}
-            button={button}
+            button={
+              {
+                ...button, 
+                opacity: buttonOpacity,
+                shape: buttonShape,
+              }
+            }
             onPressIn={() => onPressIn(button.keycode)}
             onPressOut={() => onPressOut(button.keycode)}
           />
