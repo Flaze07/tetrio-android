@@ -1,6 +1,6 @@
 import { DraggableButton } from "@/components/draggable-button";
 import { COLOR_NAME_TO_CLASS } from "@/constants/colors";
-import { ButtonConfig } from "@/types";
+import { ButtonConfig, ControlsConfig } from "@/types";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
@@ -9,8 +9,10 @@ import { CONTROL_VALUE, DEFAULT_CONTROLS } from "@/constants/controls";
 import { useButtonSave } from "@/hooks/use-button-save";
 import { TouchableOpacity, View, Text } from "react-native";
 import MaterialIcon from "@expo/vector-icons/MaterialIcons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { MoreConfigModal } from "./MoreConfigModal";
 import { useConfig } from "@/hooks/use-config";
+import * as Clipboard from "expo-clipboard";
 
 // Generate a random string ID
 const generateId = () => Math.random().toString(36).substring(2, 9);
@@ -100,6 +102,16 @@ export function ConfigScreen() {
     })
   }
 
+  const shareConfig = () => {
+    const configStr: ControlsConfig = {
+      buttonOpacity: buttonOpacity,
+      buttonShape: buttonShape,
+      buttons: buttons
+    };
+    
+    Clipboard.setStringAsync(JSON.stringify(configStr));
+  }
+
   const onSave = () => {
     saveButton(buttons);
   }
@@ -128,18 +140,42 @@ export function ConfigScreen() {
         onSizeChange={(size) => onSizeChange(size)}
       />
       <View
-        style={tw`flex-shrink flex-row mt-2`}
+        style={tw`flex-shrink flex-row mt-4`}
       >
-        <TouchableOpacity
-          onPress={() => setShowMoreConfig(true)}
-          style={tw`border border-slate-600 px-4 py-2 rounded-lg`}
+        <View
+          style={tw`flex-col gap-4`}
         >
-          <MaterialIcon
-            name="menu"
-            color={"white"}
-            size={22}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowMoreConfig(true)}
+            style={tw`border border-slate-600 px-4 py-2 rounded-lg`}
+          >
+            <MaterialIcon
+              name="menu"
+              color={"white"}
+              size={22}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowMoreConfig(true)}
+            style={tw`border border-slate-600 px-4 py-2 rounded-lg`}
+          >
+            <MaterialIcon
+              name="share"
+              color={"white"}
+              size={22}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowMoreConfig(true)}
+            style={tw`border border-slate-600 px-4 py-2 rounded-lg`}
+          >
+            <MaterialIcon
+              name="download"
+              color={"white"}
+              size={22}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <MoreConfigModal
         visible={showMoreConfig}

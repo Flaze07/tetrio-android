@@ -16,3 +16,9 @@ export interface ButtonConfig {
   shape: "DIAMOND" | "SQUARE";
   opacity: number;
 }
+
+export interface ControlsConfig {
+  buttonOpacity: number;
+  buttonShape: "SQUARE" | "DIAMOND";
+  buttons: ButtonConfig[];
+}
