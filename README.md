@@ -14,5 +14,5 @@ Application Todo list is available [here](https://app.notion.com/p/3c4755d774478
 
 Special Thanks
 - [rabi](https://ch.tetr.io/u/rabi) for finding out a lots of bugs and suggestions.
-- (UNIQMG Tetrio Plus)[https://gitlab.com/UniQMG/tetrio-plus]
+- [UNIQMG Tetrio Plus](https://gitlab.com/UniQMG/tetrio-plus) for providing list of supported inputs and way to register them
 - https://github.com/myyrakle/tetrio.app-android
