@@ -3,8 +3,9 @@
 This app is in no way affiliated with OSK ( Creator of Tetr.io ) or Tetr.io itself, it's a fanmade application built in order to provide smooth experience playing tetrio on an android device.
 
 This application contains the following features
-
-- Customization of touch screen button
+- Customizable Touch Screen buttons
+- The ability to view replay files
+- The ability to send chat from mobile
 
 Additional features will be added in the future
 
