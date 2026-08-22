@@ -2,9 +2,11 @@ import { COLOR_NAME_TO_CLASS } from "@/constants/colors";
 import { CONTROLS_ELEMENT } from "@/constants/controls";
 import { ButtonConfig } from "@/types";
 import { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { runOnJS } from "react-native-reanimated";
+import { View } from "react-native";
+import {
+  Gesture,
+  GestureDetector,
+} from "react-native-gesture-handler";
 import tw from "twrnc";
 
 interface Props {
@@ -14,65 +16,79 @@ interface Props {
 }
 
 export function GameButton(props: Props) {
-
   const {
     button,
     onPressIn,
     onPressOut,
   } = props;
 
-  const [isPressed, setIsPressed] = useState<boolean>(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   const color = COLOR_NAME_TO_CLASS[button.color];
 
-  const handlePressIn = () => {
+  const pressIn = () => {
     setIsPressed(true);
     onPressIn?.();
   };
 
-  const handlePressOut = () => {
+  const pressOut = () => {
     setIsPressed(false);
     onPressOut?.();
   };
 
-  const tap = Gesture.LongPress()
-    .minDuration(0)
+  const gesture = Gesture.Manual()
     .runOnJS(true)
-    .onBegin(() => handlePressIn())
-    .onFinalize(() => handlePressOut());
 
+    .onTouchesDown((event) => {
+      if (event.changedTouches.length > 0) {
+        pressIn();
+      }
+    })
+
+    .onTouchesUp((event) => {
+      if (event.changedTouches.length > 0) {
+        pressOut();
+      }
+    })
+
+    .onTouchesCancelled((event) => {
+      if (event.changedTouches.length > 0) {
+        pressOut();
+      }
+    });
 
   return (
-    <GestureDetector
-      gesture={tap}
-      // onPressIn={onPressIn}
-      // onPressOut={onPressOut}
-    >
+    <GestureDetector gesture={gesture}>
       <View
         style={[
           tw`absolute ${color} items-center justify-center`,
-          isPressed && {
-            opacity: button.opacity - 0.4,
-          },
-          !isPressed && {
-            opacity: button.opacity,
-          },
           {
             width: button.size.x,
             height: button.size.y,
 
+            opacity: isPressed
+              ? Math.max(0, button.opacity - 0.4)
+              : button.opacity,
+
             transform: [
-              { translateX: button.position.x },
-              { translateY: button.position.y },
               {
-                rotate: button.shape === "SQUARE" ? "0deg" : "45deg",
-              }
-            ]
-          }
+                translateX: button.position.x,
+              },
+              {
+                translateY: button.position.y,
+              },
+              {
+                rotate:
+                  button.shape === "SQUARE"
+                    ? "0deg"
+                    : "45deg",
+              },
+            ],
+          },
         ]}
       >
         {CONTROLS_ELEMENT[button.keycode]}
       </View>
     </GestureDetector>
-  )
+  );
 }

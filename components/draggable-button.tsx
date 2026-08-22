@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Animated, PanResponder, StyleProp, ViewStyle } from "react-native";
+import { Animated, PanResponder, StyleProp, View, ViewStyle } from "react-native";
 import { CONTROL_TYPE, CONTROL_VALUE, CONTROLS_ELEMENT } from "@/constants/controls";
 import tw from "twrnc";
 import { useFocusEffect } from "@react-navigation/native";
@@ -120,9 +120,8 @@ export function DraggableButton({
   return (
     <Animated.View
       {...panResponder.panHandlers}
-      onTouchStart={() => onPress?.()}
       style={[
-        tw`absolute ${colorClass} items-center justify-center`,
+        tw`absolute`,
         {
           width: size,
           height: size,
@@ -130,13 +129,45 @@ export function DraggableButton({
           transform: [
             { translateX: pan.x },
             { translateY: pan.y },
-            { rotate: shape === "DIAMOND" ? "45deg" : "0deg" }
           ],
         },
         style,
       ]}
     >
-      {CONTROLS_ELEMENT[keycode]}
+      <View
+        style={[
+          tw`${colorClass} items-center justify-center`,
+          {
+            width: size,
+            height: size,
+            transform: [
+              { rotate: shape === "DIAMOND" ? "45deg" : "0deg" },
+            ],
+          },
+        ]}
+      >
+        {CONTROLS_ELEMENT[keycode]}
+      </View>
     </Animated.View>
+    // <Animated.View
+    //   {...panResponder.panHandlers}
+    //   onTouchStart={() => onPress?.()}
+    //   style={[
+    //     tw`absolute ${colorClass} items-center justify-center`,
+    //     {
+    //       width: size,
+    //       height: size,
+    //       opacity,
+    //       transform: [
+    //         { translateX: pan.x },
+    //         { translateY: pan.y },
+    //         { rotate: shape === "DIAMOND" ? "45deg" : "0deg" }
+    //       ],
+    //     },
+    //     style,
+    //   ]}
+    // >
+    //   {CONTROLS_ELEMENT[keycode]}
+    // </Animated.View>
   );
 }
