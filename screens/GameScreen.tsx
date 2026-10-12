@@ -21,11 +21,12 @@ export function GameScreen() {
   const { buttons } = useButtonSave();
   const { buttonOpacity, buttonShape } = useConfig();
 
-  const screenWidth = Dimensions.get("window").width;
+  const screenWidth = Dimensions.get("screen").width;
 
   const [replayData] = useAtom(replayDataAtom);
 
   const [hideButtons, setHideButtons] = useState<boolean>(false);
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
 
   const removeAdJS = `
     function A() {
@@ -187,6 +188,28 @@ export function GameScreen() {
     }
   }
 
+  const modifyZoom = (zoom: number) => {
+    webviewRef.current?.injectJavaScript(
+      `
+        document.body.style.zoom = ${zoom};
+        true;
+      `
+    )
+  }
+
+  const onZoomButton = () => {
+    if (zoomLevel === 0.5) {
+      setZoomLevel(1.5);
+      return;
+    }
+
+    setZoomLevel(prev => prev - 0.5);
+  }
+
+  useEffect(() => {
+    modifyZoom(zoomLevel);
+  }, [zoomLevel])
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -228,20 +251,28 @@ export function GameScreen() {
           "https://ch.tetr.io",
         ]}
         onMessage={(e) => handleWebViewMessage(e)}
-        // injectedJavaScript={`
-        //   oldConsole = console.log;
-        //   console = new Object();
-        //   console.log = function(log) {
-        //     oldConsole(log);
-        //     window.ReactNativeWebView.postMessage(JSON.stringify({
-        //       event: 'console',
-        //       level: 'log',
-        //       args: [log]
-        //     }));
-        //   }
-        // `}
         style={tw`flex-1 w-full`}
       />
+
+      {/* <GameButton
+        button={{
+          id: "setting",
+          keycode: "SETTING",
+          size: {
+            x: 50,
+            y: 50,
+          },
+          position: {
+            x: screenWidth / 2,
+            y: 10
+          },
+          color: "stone",
+          shape: "SQUARE",
+          opacity: 0.7,
+        }}
+        onPressIn={() => onZoomButton()}
+      />
+ */}
       <GameButton
         button={{
           id: "hide",
@@ -270,14 +301,15 @@ export function GameScreen() {
             y: 50,
           },
           position: {
-            x: screenWidth - 10,
+            x: screenWidth - 60,
             y: 10,
           },
           color: "stone",
           shape: "SQUARE",
           opacity: 0.7,
         }}
-        onPressIn={() => onSendChat()}
+        onPressIn={() => onPressIn("ENTER")}
+        onPressOut={() => onPressOut("ENTER")}
       />
 
       {
@@ -286,7 +318,7 @@ export function GameScreen() {
             key={button.id}
             button={
               {
-                ...button, 
+                ...button,
                 opacity: buttonOpacity,
                 shape: buttonShape,
               }

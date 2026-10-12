@@ -17,7 +17,7 @@ export const CONTROLS = {
   retry: "R",
   chat: "T",
   hide: "HIDE",
-  sendchat: "SENDCHAT",
+  sendchat: "ENTER",
   // target1: "1",
   // target2: "2",
   // target3: "3",
@@ -46,6 +46,7 @@ export const CONTROLS_ELEMENT: any = {
   T: <MaterialIcon name="chat" size={30} color="black" />,
   HIDE: <MaterialCommunityIcon name="crosshairs" size={30} color="black" />,
   SENDCHAT: <MaterialIcon name="chat" size={30} color="black" />,
+  SETTING: <MaterialIcon name="settings" size={30} color="black" />
   // menuUp: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
   // menuDown: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
   // menuLeft: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
@@ -67,107 +68,123 @@ export type CONTROL_VALUE = typeof CONTROLS[CONTROL_TYPE];
 
 export const DEFAULT_CONTROLS: ButtonConfig[] = [
   {
-    "color": "lime",
-    "id": "6w5c8my",
-    "keycode": "ARROWLEFT",
-    "position": {
-      "x": 45.64861297607422,
-      "y": 169.18619537353516
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "lime",
+      "id": "6w5c8my",
+      "keycode": "ARROWLEFT",
+      "position": {
+          "x": 45.64861297607422,
+          "y": 169.18619537353516
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   },
   {
-    "color": "orange",
-    "id": "eq6oqz0",
-    "keycode": "ARROWRIGHT",
-    "position": {
-      "x": 201.66667938232422,
-      "y": 168.33333587646484
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "orange",
+      "id": "eq6oqz0",
+      "keycode": "ARROWRIGHT",
+      "position": {
+          "x": 201.66667938232422,
+          "y": 168.33333587646484
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   },
   {
-    "color": "red",
-    "id": "te40bsv",
-    "keycode": "CONTROL",
-    "position": {
-      "x": 450.5714111328125,
-      "y": 163.19970703125
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "red",
+      "id": "te40bsv",
+      "keycode": "CONTROL",
+      "position": {
+          "x": 450.5714111328125,
+          "y": 163.19970703125
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   },
   {
-    "color": "blue",
-    "id": "gwx49ip",
-    "keycode": "ARROWDOWN",
-    "position": {
-      "x": 121.33333587646484,
-      "y": 257.6666946411133
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "blue",
+      "id": "gwx49ip",
+      "keycode": "ARROWDOWN",
+      "position": {
+          "x": 121.33333587646484,
+          "y": 257.6666946411133
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   },
   {
-    "color": "slate",
-    "id": "33v9b6e",
-    "keycode": "SPACE",
-    "position": {
-      "x": 540.2782363891602,
-      "y": 250.55145263671875
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "slate",
+      "id": "33v9b6e",
+      "keycode": "SPACE",
+      "position": {
+          "x": 540.2782363891602,
+          "y": 250.55145263671875
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   },
   {
-    "color": "fuchsia",
-    "id": "g0sy0qh",
-    "keycode": "SHIFT",
-    "position": {
-      "x": 543.0000114440918,
-      "y": 76.33333206176758
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "fuchsia",
+      "id": "g0sy0qh",
+      "keycode": "SHIFT",
+      "position": {
+          "x": 543.0000114440918,
+          "y": 76.33333206176758
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   },
   {
-    "color": "red",
-    "id": "vf16gr7",
-    "keycode": "ARROWUP",
-    "position": {
-      "x": 632.2786064147949,
-      "y": 158.81983947753906
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "red",
+      "id": "vf16gr7",
+      "keycode": "ARROWUP",
+      "position": {
+          "x": 632.2786064147949,
+          "y": 158.81983947753906
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   },
   {
-    "color": "white",
-    "id": "sbgo4ig",
-    "keycode": "A",
-    "position": {
-      "x": 129.00000762939453,
-      "y": 75.55564880371094
-    },
-    "size": {
-      "x": 80,
-      "y": 80
-    }
+      "color": "white",
+      "id": "sbgo4ig",
+      "keycode": "A",
+      "position": {
+          "x": 129.00000762939453,
+          "y": 75.55564880371094
+      },
+      "size": {
+          "x": 80,
+          "y": 80
+      },
+      shape: "SQUARE",
+      opacity: 1
   }
 ]
