@@ -144,6 +144,10 @@ export function MenuScreen() {
         visible={replayModalVisible}
         onClose={handleCloseViewReplay}
       />
+
+      <Text style={tw`text-slate-500 text-sm absolute bottom-3 right-4 font-medium`}>
+        v4.0.0
+      </Text>
     </View>
   );
 }

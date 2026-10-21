@@ -18,6 +18,7 @@ export const CONTROLS = {
   chat: "T",
   hide: "HIDE",
   sendchat: "SENDCHAT",
+  options: "OPTIONS",
   // target1: "1",
   // target2: "2",
   // target3: "3",
@@ -46,6 +47,7 @@ export const CONTROLS_ELEMENT: any = {
   T: <MaterialIcon name="chat" size={30} color="black" />,
   HIDE: <MaterialCommunityIcon name="crosshairs" size={30} color="black" />,
   SENDCHAT: <MaterialIcon name="chat" size={30} color="black" />,
+  OPTIONS: <MaterialIcon name="settings" size={30} color="black" />,
   // menuUp: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
   // menuDown: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
   // menuLeft: <MaterialIcon name="keyboard-arrow-up" size={24} color="black" />,
@@ -56,7 +58,7 @@ export const CONTROLS_ELEMENT: any = {
 }
 
 export const CONTROLS_LIST = Object.entries(CONTROLS)
-  .filter(([key]) => key !== "hide" && key !== "sendchat")
+  .filter(([key]) => key !== "hide" && key !== "sendchat" && key !== "options")
   .map(([key, value]) => ({
     key,
     value,

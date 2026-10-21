@@ -30,7 +30,10 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
     setButtonOpacity,
     buttonShape,
     setButtonShape,
-    saveGridSize
+    saveButtonShape,
+    saveGridSize,
+    buttonMode,
+    saveButtonMode,
   } = useConfig();
 
   const makeDebounce = (f: (newValue: number) => any) => {
@@ -96,21 +99,49 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
             }}
           />
           <View
-            style={tw`flex-row items-center mt-5 gap-4`}
+            style={tw`flex-row items-center justify-between mt-5 pr-4`}
           >
-            <Text
-              style={tw`text-white text-2xl`}
-            >
-              Diamond Button Shape
-            </Text>
+            <View style={tw`flex-col flex-1 mr-4`}>
+              <Text style={tw`text-white text-2xl`}>
+                Diamond Button Shape
+              </Text>
+              <Text style={tw`text-slate-400 text-sm mt-1`}>
+                Rotate buttons 45 degrees into diamond shape
+              </Text>
+            </View>
             <TouchableOpacity
               style={[
-                tw`w-10 h-10 border-stone-400 border-4`,
-                buttonShape === "SQUARE" && tw`bg-transparent`,
-                buttonShape === "DIAMOND" && tw`bg-stone-300`,
+                tw`px-4 py-2 rounded-lg border-2 border-stone-400 items-center justify-center min-w-16`,
+                buttonShape === "DIAMOND" ? tw`bg-emerald-500 border-emerald-400` : tw`bg-transparent`,
               ]}
-              onPress={() => setButtonShape(buttonShape === "SQUARE" ? "DIAMOND" : "SQUARE")}
+              onPress={() => saveButtonShape(buttonShape === "SQUARE" ? "DIAMOND" : "SQUARE")}
             >
+              <Text style={tw`text-white text-base font-bold`}>
+                {buttonShape === "DIAMOND" ? "ON" : "OFF"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={tw`flex-row items-center justify-between mt-5 pr-4 pb-4`}
+          >
+            <View style={tw`flex-col flex-1 mr-4`}>
+              <Text style={tw`text-white text-2xl`}>
+                Immediate Mode
+              </Text>
+              <Text style={tw`text-slate-400 text-sm mt-1`}>
+                Buttons activate immediately on touch or slide across
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={[
+                tw`px-4 py-2 rounded-lg border-2 border-stone-400 items-center justify-center min-w-16`,
+                buttonMode === "IMMEDIATE" ? tw`bg-emerald-500 border-emerald-400` : tw`bg-transparent`,
+              ]}
+              onPress={() => saveButtonMode(buttonMode === "IMMEDIATE" ? "NORMAL" : "IMMEDIATE")}
+            >
+              <Text style={tw`text-white text-base font-bold`}>
+                {buttonMode === "IMMEDIATE" ? "ON" : "OFF"}
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

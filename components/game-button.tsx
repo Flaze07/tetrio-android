@@ -57,18 +57,20 @@ export function GameButton(props: Props) {
       }
     });
 
-  return (
-    <GestureDetector gesture={gesture}>
-      <View
-        style={[
-          tw`absolute ${color} items-center justify-center`,
-          {
-            width: button.size.x,
-            height: button.size.y,
+    const opacity = button.opacity ?? 1;
 
-            opacity: isPressed
-              ? Math.max(0, button.opacity - 0.4)
-              : button.opacity,
+    return (
+      <GestureDetector gesture={gesture}>
+        <View
+          style={[
+            tw`absolute ${color} items-center justify-center`,
+            {
+              width: button.size.x,
+              height: button.size.y,
+
+              opacity: isPressed
+                ? Math.max(0, opacity - 0.4)
+                : opacity,
 
             transform: [
               {

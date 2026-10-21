@@ -13,8 +13,8 @@ export interface ButtonConfig {
     x: number;
     y: number;
   };
-  shape: "DIAMOND" | "SQUARE";
-  opacity: number;
+  shape?: "DIAMOND" | "SQUARE";
+  opacity?: number;
 }
 
 export interface ControlsConfig {
