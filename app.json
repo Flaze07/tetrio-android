@@ -2,7 +2,7 @@
   "expo": {
     "name": "tetrio-android",
     "slug": "tetrio-android",
-    "version": "4.0.0",
+    "version": "4.1.0",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "com.flaze07.tetrioandroid",

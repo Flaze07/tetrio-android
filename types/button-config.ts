@@ -1,6 +1,8 @@
 import { TailwindColorName } from "@/constants/colors";
 import { CONTROL_TYPE, CONTROL_VALUE } from "@/constants/controls";
 
+export type ButtonMode = "NORMAL" | "IMMEDIATE";
+
 export interface ButtonConfig {
   id: string;
   position: {
@@ -15,6 +17,7 @@ export interface ButtonConfig {
   };
   shape?: "DIAMOND" | "SQUARE";
   opacity?: number;
+  mode?: ButtonMode;
 }
 
 export interface ControlsConfig {

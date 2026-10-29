@@ -9,8 +9,8 @@ import tw from "twrnc";
 interface MoreConfigModalProps {
   visible?: boolean;
   onClose?: () => void;
-  buttonConfig?: ButtonConfig;
-  modifyConfig?: (config: ButtonConfig) => void 
+  currentButton?: ButtonConfig | null;
+  onDeleteButton?: () => void;
 }
 
 export function MoreConfigModal(props: MoreConfigModalProps) {
@@ -18,8 +18,8 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
   const {
     visible = false,
     onClose,
-    buttonConfig,
-    modifyConfig,
+    currentButton,
+    onDeleteButton,
   } = props;
 
   const [displayGridSize, setDisplayGridSize] = useState<number>(10);
@@ -32,8 +32,6 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
     setButtonShape,
     saveButtonShape,
     saveGridSize,
-    buttonMode,
-    saveButtonMode,
   } = useConfig();
 
   const makeDebounce = (f: (newValue: number) => any) => {
@@ -122,25 +120,31 @@ export function MoreConfigModal(props: MoreConfigModalProps) {
             </TouchableOpacity>
           </View>
           <View
-            style={tw`flex-row items-center justify-between mt-5 pr-4 pb-4`}
+            style={tw`flex-row items-center justify-between mt-5 pr-4 pb-4 border-t border-slate-800 pt-4`}
           >
             <View style={tw`flex-col flex-1 mr-4`}>
-              <Text style={tw`text-white text-2xl`}>
-                Immediate Mode
+              <Text style={tw`text-red-400 text-2xl`}>
+                Delete Button
               </Text>
               <Text style={tw`text-slate-400 text-sm mt-1`}>
-                Buttons activate immediately on touch or slide across
+                {currentButton
+                  ? `Remove the selected button (${currentButton.keycode})`
+                  : "Select a button on the editor to delete it"}
               </Text>
             </View>
             <TouchableOpacity
+              disabled={!currentButton}
               style={[
-                tw`px-4 py-2 rounded-lg border-2 border-stone-400 items-center justify-center min-w-16`,
-                buttonMode === "IMMEDIATE" ? tw`bg-emerald-500 border-emerald-400` : tw`bg-transparent`,
+                tw`px-4 py-2 rounded-lg`,
+                currentButton ? tw`bg-red-500` : tw`bg-red-500/30`,
               ]}
-              onPress={() => saveButtonMode(buttonMode === "IMMEDIATE" ? "NORMAL" : "IMMEDIATE")}
+              onPress={() => {
+                onDeleteButton?.();
+                onClose?.();
+              }}
             >
               <Text style={tw`text-white text-base font-bold`}>
-                {buttonMode === "IMMEDIATE" ? "ON" : "OFF"}
+                Delete
               </Text>
             </TouchableOpacity>
           </View>

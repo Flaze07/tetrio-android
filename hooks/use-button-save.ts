@@ -73,9 +73,9 @@ export function useButtonSave(): UseReturn {
 
       const buttons = await loadButton();
       if (buttons === null) {
-        setButtons(DEFAULT_CONTROLS);
+        setButtons(DEFAULT_CONTROLS.map(b => ({ ...b, mode: b.mode || "NORMAL" })));
       } else {
-        setButtons(buttons);
+        setButtons(buttons.map((b: ButtonConfig) => ({ ...b, mode: b.mode || "NORMAL" })));
       }
 
       const opacity = await loadOpacity();

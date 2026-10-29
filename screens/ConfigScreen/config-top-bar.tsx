@@ -1,5 +1,4 @@
-import { Dropdown } from "@/components/dropdown";
-import { COLOR_NAME_TO_CLASS, COLOR_OPTIONS } from "@/constants/colors";
+import { Dropdown } from "@/components/dropdown"; import { COLOR_NAME_TO_CLASS, COLOR_OPTIONS } from "@/constants/colors";
 import { ButtonConfig } from "@/types";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -10,12 +9,12 @@ import { CONTROL_TYPE, CONTROLS_LIST } from "@/constants/controls";
 
 interface ConfigTopBarProps {
   onAddButton: () => void;
-  onDeleteButton: () => void;
   currentSelectedIdx: number;
   currentButton: ButtonConfig | null;
   onSelectColor: (color: string) => void;
   onSizeChange: (size: number) => void;
   onKeycodeChange: (keycode: CONTROL_TYPE) => void;
+  onToggleMode?: () => void;
   onSave: () => void;
 }
 
@@ -23,12 +22,12 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
 
   const {
     onAddButton,
-    onDeleteButton,
     currentSelectedIdx,
     currentButton,
     onSelectColor,
     onSizeChange,
     onKeycodeChange,
+    onToggleMode,
     onSave,
   } = props;
 
@@ -60,7 +59,7 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
         </Text>
       </TouchableOpacity>
       <View
-        style={tw`${currentSelectedIdx === -1 ? 'hidden' : 'flex-row w-full pr-40 items-center ml-2'}`}
+        style={tw`${currentSelectedIdx === -1 ? 'hidden' : 'flex-row w-full pr-4 items-center ml-2'}`}
       >
         <TouchableOpacity
           onPress={() => setShowColorDropdown(true)}
@@ -118,7 +117,7 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
 
         <Text style={tw`text-white mr-2`}>Size: {Math.round(currentButton?.size?.x || 0)}</Text>
         <Slider
-          style={{ width: 200, height: 40 }}
+          style={{ width: 140, height: 40 }}
           minimumValue={20}
           maximumValue={200}
           step={5}
@@ -128,17 +127,17 @@ export function ConfigTopBar(props: ConfigTopBarProps) {
           onValueChange={onSizeChange}
         />
 
-        <View
-          style={tw`flex-1`}
-        />
         <TouchableOpacity
-          onPress={() => onDeleteButton()}
-          style={tw`bg-red-500 px-4 py-2 rounded-lg`}
+          onPress={onToggleMode}
+          style={[
+            tw`border px-3 py-2 rounded-lg ml-2 min-w-28 items-center justify-center`,
+            currentButton?.mode === "IMMEDIATE"
+              ? tw`bg-emerald-500 border-emerald-400`
+              : tw`border-slate-600 bg-transparent`,
+          ]}
         >
-          <Text
-            style={tw`text-white`}
-          >
-            Delete
+          <Text style={tw`text-white text-xs font-bold`}>
+            {currentButton?.mode === "IMMEDIATE" ? "Immediate: ON" : "Immediate: OFF"}
           </Text>
         </TouchableOpacity>
       </View>

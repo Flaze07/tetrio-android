@@ -24,7 +24,7 @@ export function GameScreen() {
   const { params } = useRoute<GameRouteProp>();
 
   const { buttons } = useButtonSave();
-  const { buttonOpacity, buttonShape, buttonMode } = useConfig();
+  const { buttonOpacity, buttonShape } = useConfig();
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -160,7 +160,7 @@ export function GameScreen() {
     const currentButtons = buttonsRef.current ?? [];
     const hit: string[] = [];
     for (const b of currentButtons) {
-      if (isPointInButton(px, py, b)) {
+      if (b.mode === "IMMEDIATE" && isPointInButton(px, py, b)) {
         hit.push(b.id);
       }
     }
@@ -253,7 +253,7 @@ export function GameScreen() {
 
   useEffect(() => {
     clearAllTouches();
-  }, [buttonMode]);
+  }, [buttons]);
 
   const onHide = () => {
     setHideButtons(prev => {
@@ -264,9 +264,11 @@ export function GameScreen() {
     });
   }
 
+  const hasImmediateButtons = buttons?.some(b => b.mode === "IMMEDIATE") ?? false;
+
   const immediateGesture = Gesture.Manual()
     .runOnJS(true)
-    .enabled(buttonMode === "IMMEDIATE")
+    .enabled(hasImmediateButtons)
     .onTouchesDown((event) => {
       syncTouches(event.allTouches);
     })
@@ -509,36 +511,32 @@ export function GameScreen() {
 
         {
           !hideButtons && (
-            buttonMode === "IMMEDIATE" ? (
-              buttons?.map(button => (
-                <ImmediateGameButton
-                  key={button.id}
-                  button={
-                    {
-                      ...button, 
-                      opacity: buttonOpacity,
-                      shape: buttonShape,
-                    }
-                  }
-                  isPressed={immediatePressedIds.has(button.id)}
-                />
-              ))
-            ) : (
-              buttons?.map(button => (
+            buttons?.map(button => {
+              const resolvedButton = {
+                ...button, 
+                opacity: buttonOpacity,
+                shape: buttonShape,
+              };
+
+              if (button.mode === "IMMEDIATE") {
+                return (
+                  <ImmediateGameButton
+                    key={button.id}
+                    button={resolvedButton}
+                    isPressed={immediatePressedIds.has(button.id)}
+                  />
+                );
+              }
+
+              return (
                 <GameButton
                   key={button.id}
-                  button={
-                    {
-                      ...button, 
-                      opacity: buttonOpacity,
-                      shape: buttonShape,
-                    }
-                  }
+                  button={resolvedButton}
                   onPressIn={() => onPressIn(button.keycode)}
                   onPressOut={() => onPressOut(button.keycode)}
                 />
-              ))
-            )
+              );
+            })
           )
         }
 

@@ -71,9 +71,23 @@ export function ConfigScreen() {
         },
         shape: "SQUARE",
         opacity: 1,
+        mode: "NORMAL",
       },
     ]);
   }
+
+  const onToggleMode = () => {
+    if (currentSelectedIdx === -1) return;
+    setButtons((prev) => {
+      const newButtons = [...prev];
+      const currentMode = newButtons[currentSelectedIdx]?.mode || "NORMAL";
+      newButtons[currentSelectedIdx] = {
+        ...newButtons[currentSelectedIdx],
+        mode: currentMode === "IMMEDIATE" ? "NORMAL" : "IMMEDIATE",
+      };
+      return newButtons;
+    });
+  };
 
   const onDeleteButton = () => {
     if (currentSelectedIdx === -1) return;
@@ -137,7 +151,11 @@ export function ConfigScreen() {
         )
         return;
       }
-      setButtons(parsed.buttons);
+      const buttonsWithDefaults = parsed.buttons.map((button) => ({
+        ...button,
+        mode: button.mode || "NORMAL",
+      }));
+      setButtons(buttonsWithDefaults);
       setButtonOpacity(parsed.buttonOpacity);
       setButtonShape(parsed.buttonShape);
       setShowImportConfig(false);
@@ -155,7 +173,7 @@ export function ConfigScreen() {
   }
 
   const onReset = () => {
-    setButtons(DEFAULT_CONTROLS);
+    setButtons(DEFAULT_CONTROLS.map(b => ({ ...b, mode: b.mode || "NORMAL" })));
   }
 
   useEffect(() => {
@@ -172,10 +190,10 @@ export function ConfigScreen() {
         currentSelectedIdx={currentSelectedIdx}
         currentButton={currentSelectedIdx === -1 ? null : buttons[currentSelectedIdx]}
         onAddButton={() => onAddButton()}
-        onDeleteButton={() => onDeleteButton()}
         onSave={() => onSave()}
         onKeycodeChange={(newValue) => onKeycodeChange(newValue)}
         onSizeChange={(size) => onSizeChange(size)}
+        onToggleMode={() => onToggleMode()}
       />
       <View
         style={tw`flex-shrink flex-row mt-4`}
@@ -274,7 +292,8 @@ export function ConfigScreen() {
       <MoreConfigModal
         visible={showMoreConfig}
         onClose={() => setShowMoreConfig(false)}
-        buttonConfig={currentSelectedIdx=== -1 ? undefined : {...buttons[currentSelectedIdx]}}
+        currentButton={currentSelectedIdx === -1 ? null : buttons[currentSelectedIdx]}
+        onDeleteButton={() => onDeleteButton()}
       />
       {
         buttons.map((button, idx) => (
