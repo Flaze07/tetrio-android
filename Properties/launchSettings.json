@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Windows Machine": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    },
+    "Android Clean Log": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ANDROID_LOG_TAGS": "DOTNET:V *:S"
+      }
+    }
+  }
+}

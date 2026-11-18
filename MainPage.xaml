@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TetrioMaui.Controls"
+    x:Class="TetrioMaui.MainPage"
+    xmlns:viewmodel="clr-namespace:TetrioMaui.ViewModel"
+    x:DataType="viewmodel:MainViewModel"
+    xmlns:models="clr-namespace:TetrioMaui.Models"
+    Shell.NavBarIsVisible="False"
+>
+
+    <Grid>
+        <WebView 
+            x:Name="TetrioWebView"
+            Source="https://tetr.io"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill" 
+        />
+        <AbsoluteLayout>
+            <controls:MultiTouchView
+                UnderlyingView="{x:Reference TetrioWebView}"
+                UpdateButtonCommand="{Binding UpdateButtonCommand}"
+                MultiTouchCommand="{Binding MultiTouchCommand}"
+                AbsoluteLayout.LayoutFlags="All"
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                ButtonConfigs="{Binding ButtonConfigs}"
+            />
+        </AbsoluteLayout>
+        <AbsoluteLayout
+            BindableLayout.ItemsSource="{Binding CombinedButtons}"
+            InputTransparent="True"
+            CascadeInputTransparent="True"
+        >
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="models:ButtonVisualState">
+                    <BoxView
+                        Color="Red"
+                        Opacity="{Binding Opacity}"
+                        AbsoluteLayout.LayoutBounds="{Binding Config.Bounds}"
+                    >
+                    </BoxView>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </AbsoluteLayout>
+    </Grid>
+
+</ContentPage>
