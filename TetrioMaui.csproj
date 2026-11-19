@@ -47,6 +47,20 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
+	<!-- The Expo/React Native project shares this folder. Keep its files out of the
+	     MAUI default globs (MAUI picks up every *.css/*.xaml, including node_modules). -->
+	<PropertyGroup>
+		<DefaultItemExcludes>$(DefaultItemExcludes);node_modules\**;.expo\**;assets\**;android\**;ios\**</DefaultItemExcludes>
+		<EnableDefaultMauiItems>true</EnableDefaultMauiItems>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<MauiCss Remove="node_modules\**" />
+		<MauiXaml Remove="node_modules\**" />
+		<None Remove="node_modules\**" />
+		<Compile Remove="node_modules\**" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />

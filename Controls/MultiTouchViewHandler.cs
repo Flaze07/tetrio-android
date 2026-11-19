@@ -1,3 +1,4 @@
+using Android.Bluetooth;
 using Android.Content;
 using Android.Media.Metrics;
 using Android.Util;
@@ -61,6 +62,14 @@ public partial class MultiTouchViewHandler : ViewHandler<IMultiTouchView, Platfo
         platformView.Touch -= OnPlatformTouch;
     }
 
+    private bool CheckPointerInButton(double x, double y, ButtonConfig config)
+    {
+        return x > config.X
+            && x < (config.X + config.Width)
+            && y > config.Y
+            && y < (config.Y + config.Height);
+    }
+
     private void OnPlatformTouch(object? sender, PlatformView.TouchEventArgs e)
     {
         var motionEvent = e.Event;
@@ -69,7 +78,6 @@ public partial class MultiTouchViewHandler : ViewHandler<IMultiTouchView, Platfo
             return;
         }
 
-        VirtualView.OnMultiTouchEvent(motionEvent.ActionMasked.ToString());
         if (motionEvent.ActionMasked == MotionEventActions.Move)
         {
             HandleMotionMove(motionEvent);
@@ -89,45 +97,46 @@ public partial class MultiTouchViewHandler : ViewHandler<IMultiTouchView, Platfo
 
     private void HandleMotionMove(MotionEvent motionEvent)
     {
-        for(int i = 0; i < motionEvent.PointerCount; ++i)
+        foreach(var (index, config) in _buttonConfigs.Index())
         {
-            MotionEvent.PointerCoords coord = new();
-            motionEvent.GetPointerCoords(i, coord);
-            
-            foreach(var (index, config) in _buttonConfigs.Index())
+
+            if (config.IsTap) continue;
+
+            var touched = false;
+            for (int i = 0; i < motionEvent.PointerCount; ++i)
             {
-                if (config.IsTap)
+                MotionEvent.PointerCoords coord = new();
+                motionEvent.GetPointerCoords(i, coord);
+
+                var mauiX = Context.FromPixels(coord.X);
+                var mauiY = Context.FromPixels(coord.Y);
+
+                bool inButton = CheckPointerInButton(mauiX, mauiY, config);
+
+                if (inButton)
                 {
-                    continue;
+                    touched = true;
                 }
+            }
 
-                double mauiX = Context.FromPixels(coord.X);
-                double mauiY = Context.FromPixels(coord.Y);
+            var state = _buttonState[index];
 
-                var state = _buttonState[index];
-
-                bool inButton = mauiX  > config.X
-                    && mauiX < (config.X + config.Width)
-                    && mauiY > config.Y
-                    && mauiY < (config.Y + config.Height);
-
-                switch (state)
-                {
-                    case PressStatus.Pressed:
-                        if (!inButton)
-                        {
-                            _buttonState[index] = new PressStatus.None();
-                            VirtualView.OnUpdateButton(index, false);
-                        } 
-                    break;
-                    case PressStatus.None:
-                        if (inButton)
-                        {
-                            _buttonState[index] = new PressStatus.Pressed();
-                            VirtualView.OnUpdateButton(index, true);
-                        }
-                    break;
-                }
+            switch(state)
+            {
+                case PressStatus.Pressed:
+                    if (!touched)
+                    {
+                        _buttonState[index] = new PressStatus.None();
+                        VirtualView.OnUpdateButton(index, false);
+                    }
+                break;
+                case PressStatus.None:
+                    if (touched)
+                    {
+                        _buttonState[index] = new PressStatus.Pressed();
+                        VirtualView.OnUpdateButton(index, true);
+                    }
+                break;
             }
         }
     }
@@ -136,6 +145,9 @@ public partial class MultiTouchViewHandler : ViewHandler<IMultiTouchView, Platfo
     {
         var liftedIndex = motionEvent.ActionIndex;
         var liftedPointerId = motionEvent.GetPointerId(liftedIndex);
+
+        MotionEvent.PointerCoords liftedCoord = new();
+        motionEvent.GetPointerCoords(liftedIndex, liftedCoord);
 
         //do check for the IsTap
         foreach (var (index,state) in _buttonState.Index())
@@ -158,6 +170,7 @@ public partial class MultiTouchViewHandler : ViewHandler<IMultiTouchView, Platfo
             if (config.IsTap) continue;
 
             bool stayed = false;
+            VirtualView.OnMultiTouchEvent($"{motionEvent.PointerCount}");
             for (int i = 0; i < motionEvent.PointerCount; ++i)
             {
                 if (liftedIndex == i) continue;
@@ -165,13 +178,12 @@ public partial class MultiTouchViewHandler : ViewHandler<IMultiTouchView, Platfo
                 MotionEvent.PointerCoords coord = new();
                 motionEvent.GetPointerCoords(i, coord);
 
+                if (liftedCoord == coord) continue;
+
                 double mauiX = Context.FromPixels(coord.X);
                 double mauiY = Context.FromPixels(coord.Y);
 
-                 bool inButton = mauiX  > config.X
-                    && mauiX < (config.X + config.Width)
-                    && mauiY > config.Y
-                    && mauiY < (config.Y + config.Height);
+                bool inButton = CheckPointerInButton(mauiX, mauiY, config);
 
                 if (inButton)
                 {
