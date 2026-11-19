@@ -104,14 +104,16 @@ export function GameScreen() {
   const removeAds = () => {
     webviewRef?.current?.injectJavaScript(removeAdJS)
   }
+  const keyEventInit = (code: CONTROL_VALUE) =>
+    code === "UNDO"
+      ? `{ bubbles: true, code: 'KeyZ', key: 'z', keyCode: 90, which: 90, ctrlKey: true }`
+      : `{ bubbles: true, code: '${code}' }`;
+
   const onPressIn = (code: CONTROL_VALUE) => {
     webviewRef.current?.injectJavaScript(`
     (function() {
       document.body.dispatchEvent(
-        new KeyboardEvent('keydown', {
-          bubbles: true,
-          code: '${code}',
-        })
+        new KeyboardEvent('keydown', ${keyEventInit(code)})
       );
     })();
     true;
@@ -122,10 +124,7 @@ export function GameScreen() {
     webviewRef.current?.injectJavaScript(`
     (function() {
       document.body.dispatchEvent(
-        new KeyboardEvent('keyup', {
-          bubbles: true,
-          code: '${code}',
-        })
+        new KeyboardEvent('keyup', ${keyEventInit(code)})
       );
     })();
     true;
