@@ -8,3 +8,7 @@ expo-env.d.ts
 .expo/
 node_modules/
 android/
+
+bin/
+obj/
+makefile
