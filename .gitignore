@@ -11,3 +11,7 @@ obj/
 .DS_Store
 
 makefile
+
+.expo/
+node_modules
+expo-env.d.ts
