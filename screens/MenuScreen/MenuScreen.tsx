@@ -12,7 +12,7 @@ type NavProps = NativeStackNavigationProp<RootStackParamList, "menu">;
 
 export function MenuScreen() {
 
-  const currentVersionUrl = "https://github.com/Flaze07/tetrio-android/releases/tag/3.0";
+  const currentVersionUrl = "https://github.com/Flaze07/tetrio-android/releases/tag/4.2";
 
   const navigation = useNavigation<NavProps>();
   const [modalVisible, setModalVisible] = useState(false);
@@ -146,7 +146,7 @@ export function MenuScreen() {
       />
 
       <Text style={tw`text-slate-500 text-sm absolute bottom-3 right-4 font-medium`}>
-        v4.0.0
+        v4.2.0
       </Text>
     </View>
   );
