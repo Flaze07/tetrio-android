@@ -1,7 +1,7 @@
 import { COLOR_NAME_TO_CLASS } from "@/constants/colors";
 import { CONTROLS_ELEMENT } from "@/constants/controls";
 import { ButtonConfig } from "@/types";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { View } from "react-native";
 import {
   Gesture,
@@ -26,36 +26,69 @@ export function GameButton(props: Props) {
 
   const color = COLOR_NAME_TO_CLASS[button.color];
 
+  // Keep latest callbacks in refs so the gesture can stay stable across
+  // re-renders (re-creating it mid-press could drop the touch-up event and
+  // leave the button stuck in its "pressed" look).
+  const onPressInRef = useRef(onPressIn);
+  const onPressOutRef = useRef(onPressOut);
+  onPressInRef.current = onPressIn;
+  onPressOutRef.current = onPressOut;
+
+  const pressedRef = useRef(false);
+
   const pressIn = () => {
+    if (pressedRef.current) return;
+    pressedRef.current = true;
     setIsPressed(true);
-    onPressIn?.();
+    onPressInRef.current?.();
   };
 
   const pressOut = () => {
+    if (!pressedRef.current) return;
+    pressedRef.current = false;
     setIsPressed(false);
-    onPressOut?.();
+    onPressOutRef.current?.();
   };
 
-  const gesture = Gesture.Manual()
-    .runOnJS(true)
-
-    .onTouchesDown((event) => {
-      if (event.changedTouches.length > 0) {
-        pressIn();
+  // Release if the button unmounts while pressed.
+  useEffect(() => {
+    return () => {
+      if (pressedRef.current) {
+        pressedRef.current = false;
+        onPressOutRef.current?.();
       }
-    })
+    };
+  }, []);
 
-    .onTouchesUp((event) => {
-      if (event.changedTouches.length > 0) {
-        pressOut();
-      }
-    })
-
-    .onTouchesCancelled((event) => {
-      if (event.changedTouches.length > 0) {
-        pressOut();
-      }
-    });
+  const gesture = useMemo(
+    () =>
+      Gesture.Manual()
+        .runOnJS(true)
+        .onTouchesDown((event, stateManager) => {
+          stateManager.begin();
+          stateManager.activate();
+          if (event.changedTouches.length > 0) {
+            pressIn();
+          }
+        })
+        .onTouchesUp((event, stateManager) => {
+          const remaining = event.allTouches.filter(
+            (t) => !event.changedTouches.some((c) => c.id === t.id)
+          );
+          if (remaining.length === 0) {
+            pressOut();
+            stateManager.end();
+          }
+        })
+        .onTouchesCancelled((_event, stateManager) => {
+          pressOut();
+          stateManager.end();
+        })
+        .onFinalize(() => {
+          pressOut();
+        }),
+    []
+  );
 
     const opacity = button.opacity ?? 1;
 
@@ -69,7 +102,7 @@ export function GameButton(props: Props) {
               height: button.size.y,
 
               opacity: isPressed
-                ? Math.max(0, opacity - 0.4)
+                ? Math.max(0.2, opacity - 0.4)
                 : opacity,
 
             transform: [

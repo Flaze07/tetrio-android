@@ -23,7 +23,7 @@ export function ImmediateGameButton({ button, isPressed = false }: ImmediateGame
           width: button.size.x,
           height: button.size.y,
           opacity: isPressed
-            ? Math.max(0, opacity - 0.4)
+            ? Math.max(0.2, opacity - 0.4)
             : opacity,
           transform: [
             {
