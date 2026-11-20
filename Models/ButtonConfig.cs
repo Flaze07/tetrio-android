@@ -44,5 +44,11 @@ public record ButtonConfig
         set;
     } = true;
 
+    public Color Color
+    {
+        get;
+        set;
+    } = Colors.SlateGray;
+
     public Rect Bounds => new(X, Y, Width, Height);
 }

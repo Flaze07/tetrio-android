@@ -35,7 +35,7 @@
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="models:ButtonVisualState">
                     <BoxView
-                        Color="Red"
+                        Color="{Binding Config.Color}"
                         Opacity="{Binding Opacity}"
                         AbsoluteLayout.LayoutBounds="{Binding Config.Bounds}"
                     >

@@ -17,7 +17,8 @@ public partial class MainViewModel : ObservableObject
                 Y = 200,
                 Width = 100,
                 Height = 100,
-                IsTap = false,
+                Color = Colors.Red,
+                IsTap = true,
             },
             new ButtonConfig
             {
@@ -25,6 +26,7 @@ public partial class MainViewModel : ObservableObject
                 Y = 200,
                 Width = 100,
                 Height = 100,
+                Color = Colors.Blue,
                 IsTap = false,
             },
         ];

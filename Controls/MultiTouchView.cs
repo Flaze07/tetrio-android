@@ -76,9 +76,9 @@ public class MultiTouchView : View, IMultiTouchView
 
     void IMultiTouchView.OnMultiTouchEvent(string s)
     {
-        if (MultiTouchCommand?.CanExecute(s) == true)
+        if (MultiTouchCommand?.CanExecute($"FLAZE OUTPUTTING THIS SHIT {s}") == true)
         {
-            MultiTouchCommand.Execute(s);
+            MultiTouchCommand.Execute($"FLAZE OUTPUTTING THIS SHIT{s}");
         }
     }
 
